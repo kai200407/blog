@@ -5,21 +5,29 @@ import ThemeToggle from './ThemeToggle.astro';
 import Search from './Search.astro';
 ---
 
-<header class="sticky top-0 z-50 bg-background/80 backdrop-blur-sm">
-	<div class="container mx-auto px-4 h-16 flex items-center justify-between max-w-4xl">
-		<a class="text-lg font-bold tracking-tight hover:text-primary/80 transition-colors" href="/">
-			{SITE_TITLE}
-		</a>
-        
-        <div class="flex items-center gap-6">
-            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
-                <HeaderLink href="/blog">Writing</HeaderLink>
-                <HeaderLink href="/about">About</HeaderLink>
-            </nav>
-            <div class="flex items-center gap-2">
-                <Search />
-                <ThemeToggle />
-            </div>
-        </div>
+<header class="py-8">
+	<div class="container mx-auto px-4 max-w-2xl">
+		<nav class="flex items-center justify-between">
+			<!-- Logo / Site Title -->
+			<a 
+				href="/" 
+				class="text-lg font-semibold tracking-tight hover:text-primary transition-colors"
+			>
+				{SITE_TITLE}
+			</a>
+			
+			<!-- Navigation Links -->
+			<div class="flex items-center gap-6">
+				<div class="hidden sm:flex items-center gap-6 text-sm">
+					<HeaderLink href="/blog">Writing</HeaderLink>
+					<HeaderLink href="/about">About</HeaderLink>
+				</div>
+				
+				<div class="flex items-center gap-2">
+					<Search />
+					<ThemeToggle />
+				</div>
+			</div>
+		</nav>
 	</div>
 </header>

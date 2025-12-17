@@ -2,24 +2,42 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
->
-    <div class="prose dark:prose-invert prose-lg mx-auto">
-        <h1>About Me</h1>
-        <p>
-            Welcome to my personal website! I am a software engineer passionate about...
-        </p>
-        <h2>Skills</h2>
-        <ul>
-            <li>JavaScript / TypeScript</li>
-            <li>React / Astro / Next.js</li>
-            <li>Node.js / Python</li>
-        </ul>
-        <h2>Contact</h2>
-        <p>
-            You can reach me at <a href="mailto:your-email@example.com">your-email@example.com</a>.
-        </p>
-    </div>
+<Layout title="About" description="About me" class="max-w-2xl">
+	<article class="py-12">
+		<header class="mb-12">
+			<p class="text-sm text-muted-foreground mb-4 tracking-wide uppercase">About</p>
+			<h1 class="text-2xl md:text-3xl font-bold tracking-tight mb-4">
+				A little bit about me
+			</h1>
+		</header>
+
+		<div class="prose prose-zinc dark:prose-invert prose-lg max-w-none
+			prose-headings:font-semibold prose-headings:tracking-tight
+			prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+		">
+			<p>
+				Hello! I'm a developer who loves building things for the web. 
+				I believe in simplicity, both in design and in code.
+			</p>
+
+			<h2>What I Do</h2>
+			<p>
+				I spend most of my time writing code, reading, and thinking about 
+				how to make technology more human-friendly.
+			</p>
+
+			<h2>Skills</h2>
+			<ul>
+				<li>JavaScript / TypeScript</li>
+				<li>React / Vue / Astro</li>
+				<li>Node.js / Python</li>
+				<li>UI/UX Design</li>
+			</ul>
+
+			<h2>Get in Touch</h2>
+			<p>
+				Feel free to reach out at <a href="mailto:your-email@example.com">your-email@example.com</a>.
+			</p>
+		</div>
+	</article>
 </Layout>

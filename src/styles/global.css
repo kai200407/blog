@@ -4,70 +4,85 @@
 
 @layer base {
     :root {
-        /* Minimalist Zinc/Slate Palette - Light */
-        --background: 0 0% 100%;
-        --foreground: 240 10% 3.9%;
+        /* ============================================
+       极简暖黄配色 - Light Mode
+       灵感：复古纸张、温暖阳光、米色调
+       ============================================ */
 
-        --card: 0 0% 100%;
-        --card-foreground: 240 10% 3.9%;
+        /* 主背景：温暖的米黄色 */
+        --background: 45 30% 96%;
+        /* 前景文字：深棕色，柔和不刺眼 */
+        --foreground: 30 20% 15%;
 
-        --popover: 0 0% 100%;
-        --popover-foreground: 240 10% 3.9%;
+        --card: 45 30% 96%;
+        --card-foreground: 30 20% 15%;
 
-        /* Pure black for primary actions */
-        --primary: 240 5.9% 10%;
-        --primary-foreground: 0 0% 98%;
+        --popover: 45 40% 98%;
+        --popover-foreground: 30 20% 15%;
 
-        --secondary: 240 4.8% 95.9%;
-        --secondary-foreground: 240 5.9% 10%;
+        /* 主色调：温暖的琥珀/焦糖色 */
+        --primary: 35 80% 35%;
+        --primary-foreground: 45 40% 98%;
 
-        --muted: 240 4.8% 95.9%;
-        --muted-foreground: 240 3.8% 46.1%;
+        /* 次要色：浅米色 */
+        --secondary: 40 25% 90%;
+        --secondary-foreground: 30 20% 20%;
 
-        --accent: 240 4.8% 95.9%;
-        --accent-foreground: 240 5.9% 10%;
+        /* 静音色：柔和的灰棕 */
+        --muted: 40 20% 92%;
+        --muted-foreground: 30 10% 45%;
 
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
+        /* 强调色：淡黄 */
+        --accent: 45 40% 88%;
+        --accent-foreground: 30 20% 20%;
 
-        /* Softer borders */
-        --border: 240 5.9% 90%;
-        --input: 240 5.9% 90%;
-        --ring: 240 5.9% 10%;
+        --destructive: 0 70% 50%;
+        --destructive-foreground: 45 40% 98%;
 
-        --radius: 0rem;
-        /* Sharp corners for minimalism */
+        /* 边框：淡淡的棕色调 */
+        --border: 35 20% 85%;
+        --input: 35 20% 85%;
+        --ring: 35 80% 35%;
+
+        --radius: 0.25rem;
     }
 
     .dark {
-        /* Minimalist Zinc/Slate Palette - Dark */
-        --background: 240 10% 3.9%;
-        --foreground: 0 0% 98%;
+        /* ============================================
+       极简暖黄配色 - Dark Mode
+       深邃但温暖的夜间模式
+       ============================================ */
 
-        --card: 240 10% 3.9%;
-        --card-foreground: 0 0% 98%;
+        /* 深棕色背景，带一点暖意 */
+        --background: 30 15% 8%;
+        /* 米白色文字 */
+        --foreground: 40 20% 90%;
 
-        --popover: 240 10% 3.9%;
-        --popover-foreground: 0 0% 98%;
+        --card: 30 15% 10%;
+        --card-foreground: 40 20% 90%;
 
-        --primary: 0 0% 98%;
-        --primary-foreground: 240 5.9% 10%;
+        --popover: 30 15% 10%;
+        --popover-foreground: 40 20% 90%;
 
-        --secondary: 240 3.7% 15.9%;
-        --secondary-foreground: 0 0% 98%;
+        /* 主色调：明亮的琥珀色 */
+        --primary: 40 85% 55%;
+        --primary-foreground: 30 15% 8%;
 
-        --muted: 240 3.7% 15.9%;
-        --muted-foreground: 240 5% 64.9%;
+        --secondary: 30 12% 18%;
+        --secondary-foreground: 40 20% 90%;
 
-        --accent: 240 3.7% 15.9%;
-        --accent-foreground: 0 0% 98%;
+        --muted: 30 12% 18%;
+        --muted-foreground: 35 15% 55%;
 
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 98%;
+        --accent: 35 20% 20%;
+        --accent-foreground: 40 20% 90%;
 
-        --border: 240 3.7% 15.9%;
-        --input: 240 3.7% 15.9%;
-        --ring: 240 4.9% 83.9%;
+        --destructive: 0 60% 40%;
+        --destructive-foreground: 40 20% 90%;
+
+        --border: 30 12% 20%;
+        --input: 30 12% 20%;
+        --ring: 40 85% 55%;
     }
 }
 
@@ -78,9 +93,11 @@
 
     body {
         @apply bg-background text-foreground font-sans antialiased;
+        /* 添加微妙的纸张纹理感 */
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
     }
 
-    /* Improve typography readability */
+    /* 标题样式 */
     h1,
     h2,
     h3,
@@ -88,5 +105,35 @@
     h5,
     h6 {
         @apply font-semibold tracking-tight;
+    }
+
+    /* 链接默认样式 */
+    a {
+        @apply transition-colors duration-200;
+    }
+
+    /* 选中文字的颜色 */
+    ::selection {
+        @apply bg-primary/20 text-foreground;
+    }
+}
+
+/* 自定义滚动条（可选，仅 Webkit 浏览器） */
+@layer utilities {
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-muted;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-border rounded-full;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-muted-foreground/50;
     }
 }

@@ -5,30 +5,73 @@ import FormattedDate from '../components/FormattedDate.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.props;
 ---
 
-<Layout title={title} description={description} class="max-w-3xl">
-    <article class="prose dark:prose-invert prose-zinc prose-lg mx-auto py-12">
-        <header class="mb-12 not-prose">
-             <div class="mb-6 text-sm text-muted-foreground flex gap-2 items-center">
-                <FormattedDate date={pubDate} />
-                {
-                    updatedDate && (
-                        <div class="italic">
-                            (Updated <FormattedDate date={updatedDate} />)
-                        </div>
-                    )
-                }
-            </div>
-            <h1 class="text-4xl font-extrabold tracking-tight lg:text-5xl mb-4 text-foreground">{title}</h1>
-            <p class="text-xl text-muted-foreground">{description}</p>
-        </header>
-        
-        {heroImage && <img width={1020} height={510} src={heroImage} alt="" class="rounded-lg border mb-12 w-full object-cover aspect-video bg-muted" />}
+<Layout title={title} description={description} class="max-w-2xl">
+	<article class="py-12">
+		<!-- Article Header -->
+		<header class="mb-12">
+			<div class="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+				<FormattedDate date={pubDate} />
+				{
+					updatedDate && (
+						<span class="italic">
+							· Updated <FormattedDate date={updatedDate} />
+						</span>
+					)
+				}
+			</div>
+			<h1 class="text-2xl md:text-3xl font-bold tracking-tight mb-4 leading-tight">
+				{title}
+			</h1>
+			<p class="text-lg text-muted-foreground">
+				{description}
+			</p>
+			{tags && tags.length > 0 && (
+				<div class="flex flex-wrap gap-2 mt-6">
+					{tags.map((tag) => (
+						<a 
+							href={`/tags/${tag}`} 
+							class="text-xs px-2 py-1 bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+						>
+							#{tag}
+						</a>
+					))}
+				</div>
+			)}
+		</header>
 
-        <div class="prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
-            <slot />
-        </div>
-    </article>
+		<!-- Hero Image -->
+		{heroImage && (
+			<img 
+				src={heroImage} 
+				alt="" 
+				class="w-full aspect-video object-cover mb-12 border border-border"
+			/>
+		)}
+
+		<!-- Article Content -->
+		<div class="prose prose-zinc dark:prose-invert prose-lg max-w-none
+			prose-headings:font-semibold prose-headings:tracking-tight
+			prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+			prose-blockquote:border-l-primary prose-blockquote:bg-muted/50 prose-blockquote:py-1 prose-blockquote:px-4
+			prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
+			prose-pre:bg-muted prose-pre:border prose-pre:border-border
+			prose-img:border prose-img:border-border
+			prose-hr:border-border
+		">
+			<slot />
+		</div>
+
+		<!-- Back Link -->
+		<div class="mt-16 pt-8 border-t border-border">
+			<a 
+				href="/blog" 
+				class="text-sm text-muted-foreground hover:text-primary transition-colors"
+			>
+				← Back to all posts
+			</a>
+		</div>
+	</article>
 </Layout>

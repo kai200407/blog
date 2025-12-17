@@ -2,51 +2,61 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../components/FormattedDate.astro';
-import { ArrowRight } from 'lucide-astro';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-).slice(0, 5); // Increase list to 5 items, use list view instead of cards
+).slice(0, 5);
 ---
 
-<Layout class="max-w-4xl">
-	<section class="py-20 md:py-32 flex flex-col items-start gap-6">
-		<h1 class="text-4xl font-extrabold tracking-tight md:text-6xl">
-			Hello, I'm Your Name.
+<Layout class="max-w-2xl">
+	<!-- Hero Section -->
+	<section class="py-16 md:py-24">
+		<p class="text-sm text-muted-foreground mb-4 tracking-wide uppercase">Welcome</p>
+		<h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-6 leading-tight">
+			Hi, I'm <span class="text-primary">Your Name</span>
 		</h1>
-		<p class="max-w-2xl text-xl text-muted-foreground leading-relaxed">
-			A minimalist digital garden focusing on <span class="text-foreground font-medium">technology</span>, <span class="text-foreground font-medium">design</span>, and <span class="text-foreground font-medium">life</span>.
+		<p class="text-lg text-muted-foreground leading-relaxed">
+			A minimalist space for thoughts on technology, design, and life. 
+			Writing helps me think clearly.
 		</p>
 	</section>
 
-	<section class="py-8">
-        <div class="flex items-center justify-between mb-12">
-		    <h2 class="text-2xl font-bold tracking-tight">Writing</h2>
-            <a href="/blog" class="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center transition-colors">
-                View all <ArrowRight class="ml-1 h-4 w-4" />
-            </a>
-        </div>
-		<ul class="flex flex-col gap-8">
+	<!-- Divider -->
+	<hr class="border-border" />
+
+	<!-- Recent Posts -->
+	<section class="py-12">
+		<h2 class="text-sm text-muted-foreground mb-8 tracking-wide uppercase">Recent Writing</h2>
+		
+		<ul class="space-y-8">
 			{
 				posts.map((post) => (
-					<li class="group relative flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8">
-                        <p class="text-sm text-muted-foreground whitespace-nowrap min-w-[100px]">
-						    <FormattedDate date={post.data.pubDate} />
-                        </p>
-						<div class="flex flex-col gap-1">
-                            <h3 class="text-lg font-semibold tracking-tight group-hover:underline decoration-muted-foreground/50 underline-offset-4 transition-all">
-                                <a href={`/blog/${post.slug}/`}>
-                                    <span class="absolute inset-0"></span>
-                                    {post.data.title}
-                                </a>
-                            </h3>
-                            <p class="text-muted-foreground line-clamp-1">
-                                {post.data.description}
-                            </p>
-                        </div>
+					<li class="group">
+						<a href={`/blog/${post.slug}/`} class="block">
+							<article class="flex flex-col gap-2">
+								<div class="flex items-baseline justify-between gap-4">
+									<h3 class="text-lg font-medium group-hover:text-primary transition-colors">
+										{post.data.title}
+									</h3>
+									<time class="text-sm text-muted-foreground whitespace-nowrap">
+										<FormattedDate date={post.data.pubDate} />
+									</time>
+								</div>
+								<p class="text-muted-foreground text-sm line-clamp-2">
+									{post.data.description}
+								</p>
+							</article>
+						</a>
 					</li>
 				))
 			}
 		</ul>
+
+		<a 
+			href="/blog" 
+			class="inline-block mt-10 text-sm text-primary hover:underline underline-offset-4"
+		>
+			View all posts →
+		</a>
 	</section>
 </Layout>
