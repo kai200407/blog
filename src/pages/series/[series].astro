@@ -1,0 +1,96 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	
+	// 获取所有唯一的系列
+	const seriesSet = new Set<string>();
+	posts.forEach(post => {
+		if (post.data.series) {
+			seriesSet.add(post.data.series);
+		}
+	});
+
+	return Array.from(seriesSet).map(series => ({
+		params: { series },
+		props: { 
+			seriesName: series,
+			posts: posts
+				.filter(p => p.data.series === series)
+				.sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+		}
+	}));
+}
+
+const { seriesName, posts } = Astro.props;
+
+// 按 part 分组（如果有的话）
+const groupedPosts = posts.reduce((acc, post) => {
+	// 从 slug 中提取 part 信息
+	const slug = post.slug;
+	let partName = '文章列表';
+	
+	// 尝试从 order 推断 part
+	const order = post.data.order || 0;
+	if (order >= 1 && order <= 8) partName = 'Part 1: 基础入门';
+	else if (order >= 9 && order <= 16) partName = 'Part 2: 进阶内容';
+	else if (order >= 17 && order <= 24) partName = 'Part 3: 高级主题';
+	else if (order >= 25 && order <= 40) partName = 'Part 4: 深入学习';
+	else if (order >= 41 && order <= 50) partName = 'Part 5: 实战应用';
+	else if (order >= 51) partName = 'Part 6: 项目实战';
+	
+	if (!acc[partName]) acc[partName] = [];
+	acc[partName].push(post);
+	return acc;
+}, {} as Record<string, typeof posts>);
+
+const parts = Object.keys(groupedPosts).sort();
+---
+
+<Layout title={seriesName} description={`${seriesName} 系列文章`} class="max-w-2xl">
+	<section class="py-12">
+		<header class="mb-12">
+			<a 
+				href={`${import.meta.env.BASE_URL}series`}
+				class="text-sm text-muted-foreground hover:text-primary transition-colors mb-4 inline-block"
+			>
+				← 返回系列列表
+			</a>
+			<h1 class="text-2xl md:text-3xl font-bold tracking-tight mb-4">
+				{seriesName}
+			</h1>
+			<p class="text-muted-foreground">
+				共 {posts.length} 篇文章
+			</p>
+		</header>
+
+		<div class="space-y-12">
+			{parts.map((partName) => (
+				<section>
+					<h2 class="text-sm text-muted-foreground mb-6 tracking-wide uppercase border-b border-border pb-2">
+						{partName}
+					</h2>
+					<ul class="space-y-4">
+						{groupedPosts[partName].map((post, index) => (
+							<li class="group">
+								<a href={`${import.meta.env.BASE_URL}blog/${post.slug}/`} class="block">
+									<article class="flex items-baseline gap-4">
+										<span class="text-sm text-muted-foreground font-mono min-w-[2rem]">
+											{String(post.data.order || index + 1).padStart(2, '0')}
+										</span>
+										<h3 class="font-medium group-hover:text-primary transition-colors flex-1">
+											{post.data.title}
+										</h3>
+									</article>
+								</a>
+							</li>
+						))}
+					</ul>
+				</section>
+			))}
+		</div>
+	</section>
+</Layout>

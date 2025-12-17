@@ -1,0 +1,79 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const posts = await getCollection('blog');
+
+// 按系列分组
+const seriesMap = new Map<string, { count: number; category: string }>();
+
+posts.forEach(post => {
+	const series = post.data.series;
+	const category = post.data.category || 'other';
+	if (series) {
+		const existing = seriesMap.get(series);
+		if (existing) {
+			existing.count++;
+		} else {
+			seriesMap.set(series, { count: 1, category });
+		}
+	}
+});
+
+// 转换为数组并排序
+const seriesList = Array.from(seriesMap.entries())
+	.map(([name, data]) => ({ name, ...data }))
+	.sort((a, b) => b.count - a.count);
+
+// 系列图标和颜色配置
+const seriesConfig: Record<string, { icon: string; color: string }> = {
+	'cpp': { icon: '⚡', color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' },
+	'python': { icon: '🐍', color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' },
+	'rabbitmq': { icon: '🐰', color: 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300' },
+	'reddit': { icon: '🔴', color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' },
+	'webrtc': { icon: '📹', color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' },
+};
+---
+
+<Layout title="技术系列" description="按系列浏览技术文章" class="max-w-2xl">
+	<section class="py-12">
+		<header class="mb-12">
+			<p class="text-sm text-muted-foreground mb-4 tracking-wide uppercase">Learning Path</p>
+			<h1 class="text-2xl md:text-3xl font-bold tracking-tight mb-4">
+				技术学习系列
+			</h1>
+			<p class="text-muted-foreground">
+				系统性学习各种技术，从入门到精通
+			</p>
+		</header>
+
+		<div class="space-y-4">
+			{seriesList.map((series) => {
+				const config = seriesConfig[series.category] || { icon: '📚', color: 'bg-muted text-muted-foreground' };
+				return (
+					<a 
+						href={`${import.meta.env.BASE_URL}series/${encodeURIComponent(series.name)}`}
+						class="block p-6 border border-border hover:border-primary/50 transition-colors group"
+					>
+						<div class="flex items-center gap-4">
+							<span class={`text-2xl p-3 rounded ${config.color}`}>
+								{config.icon}
+							</span>
+							<div class="flex-1">
+								<h2 class="text-lg font-medium group-hover:text-primary transition-colors">
+									{series.name}
+								</h2>
+								<p class="text-sm text-muted-foreground mt-1">
+									{series.count} 篇文章
+								</p>
+							</div>
+							<span class="text-muted-foreground group-hover:text-primary transition-colors">
+								→
+							</span>
+						</div>
+					</a>
+				);
+			})}
+		</div>
+	</section>
+</Layout>
