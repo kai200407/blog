@@ -1,0 +1,132 @@
+---
+import { Search as SearchIcon } from 'lucide-astro';
+---
+
+<div id="search" class="relative">
+	<button 
+		id="search-trigger" 
+		class="p-2 text-muted-foreground hover:text-foreground transition-colors"
+		aria-label="Search"
+	>
+		<SearchIcon class="h-4 w-4" />
+	</button>
+</div>
+
+<dialog 
+	id="search-dialog" 
+	class="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm p-0 m-0 w-full h-full open:flex items-start justify-center pt-[20vh]"
+>
+	<div class="bg-background border border-border shadow-lg w-full max-w-lg mx-4">
+		<!-- Search Header -->
+		<div class="p-4 border-b border-border">
+			<div class="relative">
+				<SearchIcon class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+				<input 
+					type="text" 
+					id="search-input" 
+					class="w-full h-10 pl-10 pr-4 bg-transparent border border-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary" 
+					placeholder="Search posts..."
+					autocomplete="off"
+				/>
+			</div>
+		</div>
+		
+		<!-- Search Results -->
+		<div id="search-results" class="max-h-[50vh] overflow-y-auto p-4">
+			<p class="text-center text-muted-foreground text-sm py-8">
+				Type to start searching...
+			</p>
+		</div>
+		
+		<!-- Search Footer -->
+		<div class="p-3 border-t border-border flex justify-between items-center text-xs text-muted-foreground">
+			<span>Press <kbd class="px-1.5 py-0.5 bg-muted border border-border">ESC</kbd> to close</span>
+			<span>Powered by Pagefind</span>
+		</div>
+	</div>
+</dialog>
+
+<script>
+	const trigger = document.getElementById('search-trigger');
+	const dialog = document.getElementById('search-dialog') as HTMLDialogElement;
+	const input = document.getElementById('search-input') as HTMLInputElement;
+	const resultsContainer = document.getElementById('search-results');
+
+	// Open dialog
+	trigger?.addEventListener('click', () => {
+		dialog?.showModal();
+		input?.focus();
+	});
+
+	// Close on backdrop click
+	dialog?.addEventListener('click', (e) => {
+		if (e.target === dialog) {
+			dialog.close();
+		}
+	});
+
+	// Close on ESC
+	dialog?.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') {
+			dialog.close();
+		}
+	});
+
+	// Initialize Pagefind
+	let pagefind: any;
+	
+	const initPagefind = async () => {
+		if (pagefind) return;
+		try {
+			// @ts-ignore
+			pagefind = await import('/pagefind/pagefind.js');
+			await pagefind.init();
+		} catch (e) {
+			console.warn('Pagefind not available in dev mode');
+		}
+	};
+
+	// Search handler
+	input?.addEventListener('input', async (e) => {
+		await initPagefind();
+		if (!pagefind) {
+			if (resultsContainer) {
+				resultsContainer.innerHTML = '<p class="text-center text-muted-foreground text-sm py-8">Search available after build</p>';
+			}
+			return;
+		}
+
+		const query = (e.target as HTMLInputElement).value;
+		if (!query) {
+			if (resultsContainer) {
+				resultsContainer.innerHTML = '<p class="text-center text-muted-foreground text-sm py-8">Type to start searching...</p>';
+			}
+			return;
+		}
+
+		const search = await pagefind.search(query);
+		const results = await Promise.all(search.results.slice(0, 5).map((r: any) => r.data()));
+
+		if (resultsContainer) {
+			if (results.length === 0) {
+				resultsContainer.innerHTML = '<p class="text-center text-muted-foreground text-sm py-8">No results found</p>';
+			} else {
+				resultsContainer.innerHTML = results.map((r: any) => `
+					<a href="${r.url}" class="block p-3 hover:bg-muted transition-colors border-b border-border last:border-0">
+						<h3 class="font-medium text-foreground mb-1">${r.meta.title || 'Untitled'}</h3>
+						<p class="text-sm text-muted-foreground line-clamp-2">${r.excerpt}</p>
+					</a>
+				`).join('');
+			}
+		}
+	});
+
+	// Keyboard shortcut: Cmd/Ctrl + K
+	document.addEventListener('keydown', (e) => {
+		if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+			e.preventDefault();
+			dialog?.showModal();
+			input?.focus();
+		}
+	});
+</script>
