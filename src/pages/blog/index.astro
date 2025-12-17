@@ -1,0 +1,38 @@
+---
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Layout from '../../layouts/Layout.astro';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<Layout title={SITE_TITLE} description={SITE_DESCRIPTION} class="max-w-4xl">
+	<section>
+        <h1 class="text-3xl font-bold mb-8">All Posts</h1>
+		<div class="grid gap-8 sm:grid-cols-2">
+			{
+				posts.map((post) => (
+					<article class="flex flex-col gap-2 group relative">
+                        {post.data.heroImage && (
+                            <img width={720} height={360} src={post.data.heroImage} alt="" class="rounded-lg border bg-muted transition-colors aspect-video object-cover mb-2" />
+                        )}
+                        <div class="flex flex-col gap-1">
+						    <h2 class="text-2xl font-bold leading-tight group-hover:text-primary transition-colors">
+							    <a href={`/blog/${post.slug}/`}>
+                                    <span class="absolute inset-0"></span>
+									{post.data.title}
+								</a>
+						    </h2>
+                            <p class="text-muted-foreground text-sm">
+						        <FormattedDate date={post.data.pubDate} />
+                            </p>
+                        </div>
+					</article>
+				))
+			}
+		</div>
+	</section>
+</Layout>

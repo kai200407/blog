@@ -1,0 +1,41 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection("blog");
+  const uniqueTags = [...new Set(allPosts.map((post) => post.data.tags).flat())];
+
+  return uniqueTags.map((tag) => {
+    const filteredPosts = allPosts.filter((post) =>
+      post.data.tags.includes(tag)
+    );
+    return {
+      params: { tag },
+      props: { posts: filteredPosts },
+    };
+  });
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<Layout title={tag} description={`Posts tagged with ${tag}`}>
+  <h1 class="text-3xl font-bold mb-8">Posts tagged with "{tag}"</h1>
+  <ul class="grid gap-8 sm:grid-cols-2">
+    {
+      posts.map((post) => (
+        <li class="flex flex-col gap-2">
+           <h2 class="text-xl font-bold">
+            <a href={`/blog/${post.slug}/`} class="hover:underline">{post.data.title}</a>
+           </h2>
+           <p class="text-sm text-muted-foreground">
+             <FormattedDate date={post.data.pubDate} />
+           </p>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>
