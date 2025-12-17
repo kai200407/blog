@@ -5,12 +5,13 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://your-domain.com', // Replace with your actual domain
-  integrations: [mdx(), sitemap(), tailwind()],
-  markdown: {
-    shikiConfig: {
-      theme: 'github-dark',
-      wrap: true,
+    site: 'https://kai200407.github.io',
+    base: '/blog',
+    integrations: [mdx(), sitemap(), tailwind()],
+    markdown: {
+        shikiConfig: {
+            theme: 'github-dark',
+            wrap: true,
+        },
     },
-  },
 });
