@@ -118,6 +118,43 @@
     }
 }
 
+/* 代码块样式 - Shiki 代码高亮 */
+@layer base {
+
+    /* 代码块容器 */
+    pre {
+        padding: 1rem !important;
+        border-radius: 0.5rem !important;
+        overflow-x: auto !important;
+        font-size: 0.875rem !important;
+        line-height: 1.7 !important;
+    }
+
+    /* 代码块内的代码 */
+    pre code {
+        background: transparent !important;
+        padding: 0 !important;
+        color: inherit !important;
+    }
+
+    /* 行内代码 */
+    :not(pre)>code {
+        background: hsl(var(--muted)) !important;
+        padding: 0.2rem 0.4rem !important;
+        border-radius: 0.25rem !important;
+        font-size: 0.875em !important;
+        color: hsl(var(--primary)) !important;
+    }
+
+    /* Shiki 代码块背景 */
+    .astro-code,
+    .shiki {
+        background-color: #1e1e1e !important;
+        border: 1px solid hsl(var(--border)) !important;
+        border-radius: 0.5rem !important;
+    }
+}
+
 /* 自定义滚动条（可选，仅 Webkit 浏览器） */
 @layer utilities {
     ::-webkit-scrollbar {
