@@ -32,7 +32,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
 				<div class="flex flex-wrap gap-2 mt-6">
 					{tags.map((tag) => (
 						<a 
-							href={`${import.meta.env.BASE_URL}tags/${tag}`} 
+							href={`${import.meta.env.BASE_URL}/tags/${tag}`} 
 							class="text-xs px-2 py-1 bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
 						>
 							#{tag}
@@ -67,7 +67,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
 		<!-- Back Link -->
 		<div class="mt-16 pt-8 border-t border-border">
 			<a 
-				href={`${import.meta.env.BASE_URL}blog`} 
+				href={`${import.meta.env.BASE_URL}/blog`} 
 				class="text-sm text-muted-foreground hover:text-primary transition-colors"
 			>
 				← Back to all posts

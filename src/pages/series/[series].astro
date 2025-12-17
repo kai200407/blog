@@ -54,7 +54,7 @@ const parts = Object.keys(groupedPosts).sort();
 	<section class="py-12">
 		<header class="mb-12">
 			<a 
-				href={`${import.meta.env.BASE_URL}series`}
+				href={`${import.meta.env.BASE_URL}/series`}
 				class="text-sm text-muted-foreground hover:text-primary transition-colors mb-4 inline-block"
 			>
 				← 返回系列列表
@@ -76,7 +76,7 @@ const parts = Object.keys(groupedPosts).sort();
 					<ul class="space-y-4">
 						{groupedPosts[partName].map((post, index) => (
 							<li class="group">
-								<a href={`${import.meta.env.BASE_URL}blog/${post.slug}/`} class="block">
+								<a href={`${import.meta.env.BASE_URL}/blog/${post.slug}/`} class="block">
 									<article class="flex items-baseline gap-4">
 										<span class="text-sm text-muted-foreground font-mono min-w-[2rem]">
 											{String(post.data.order || index + 1).padStart(2, '0')}
