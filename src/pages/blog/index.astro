@@ -34,7 +34,7 @@ const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
 					<ul class="space-y-6">
 						{postsByYear[Number(year)].map((post) => (
 							<li class="group">
-								<a href={`/blog/${post.slug}/`} class="block">
+								<a href={`${import.meta.env.BASE_URL}blog/${post.slug}/`} class="block">
 									<article class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
 										<time class="text-sm text-muted-foreground whitespace-nowrap min-w-[80px]">
 											<FormattedDate date={post.data.pubDate} />

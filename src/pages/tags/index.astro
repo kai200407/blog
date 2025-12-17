@@ -12,7 +12,7 @@ const tags = [...new Set(allPosts.map((post) => post.data.tags).flat())];
     {
       tags.map((tag) => (
         <a
-          href={`/tags/${tag}`}
+          href={`${import.meta.env.BASE_URL}tags/${tag}`}
           class="bg-muted px-4 py-2 rounded-full text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
         >
           #{tag}

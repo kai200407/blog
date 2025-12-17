@@ -10,7 +10,7 @@ import Search from './Search.astro';
 		<nav class="flex items-center justify-between">
 			<!-- Logo / Site Title -->
 			<a 
-				href="/" 
+				href={import.meta.env.BASE_URL} 
 				class="text-lg font-semibold tracking-tight hover:text-primary transition-colors"
 			>
 				{SITE_TITLE}
@@ -19,8 +19,8 @@ import Search from './Search.astro';
 			<!-- Navigation Links -->
 			<div class="flex items-center gap-6">
 				<div class="hidden sm:flex items-center gap-6 text-sm">
-					<HeaderLink href="/blog">Writing</HeaderLink>
-					<HeaderLink href="/about">About</HeaderLink>
+					<HeaderLink href={`${import.meta.env.BASE_URL}blog`}>Writing</HeaderLink>
+					<HeaderLink href={`${import.meta.env.BASE_URL}about`}>About</HeaderLink>
 				</div>
 				
 				<div class="flex items-center gap-2">
